@@ -1,0 +1,23 @@
+{% extends 'Pharmacy/Main.html' %}
+
+
+{% block content %}
+<div class="task" style="    margin-left: 20pc;">
+    {% if not product.is_archived %}
+    <h5><p>Are you sure you want to archive <strong>  "{{product.name}}" </strong>?</p> </h5></div>
+    {% else %}
+
+    <h5><p>Are you sure you want to disrchive <strong>  "{{product.name}}" </strong>?</p> </h5></div>
+    {% endif %}
+
+<br>
+<form method="POST" action="." style="    margin-left: 20pc;
+">
+	{% csrf_token %}
+    <div class="content">
+	    <input  class="btn-mod" type="submit" name="Confirm">
+        <a class="btn-mod" href="{% url 'dash' %}" > Cancel</a>
+    </div>
+</form>
+
+{% endblock  %}

@@ -1,0 +1,1 @@
+web: gunicorn PharmaDz.wsgi  --log-file -

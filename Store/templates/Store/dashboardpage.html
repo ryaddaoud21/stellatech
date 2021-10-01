@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Stella Tech</title>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="{%static 'css/bootstrap.min.css'%}" />
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="{%static 'css/slick.css'%}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'css/slick-theme.css'%}" />
+
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/nouislider.min.css'%}" />
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/style2.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'css/ssss.css'%}">
+    <link rel="stylesheet" href="{%static 'css/aaaa.css'%}">
+    <link type="text/css" rel="stylesheet" href="{%static 'css/admin.css'%}" />
+
+    <link rel="icon" href="img/logo-boutique1.ico" type="image/gif" sizes="16x16">
+
+
+
+
+
+</head>
+
+
+<body>
+
+    <div class="sidebar">
+        <a href="#" class="logo">
+            <img src="./img/LOGOO.png" alt="" width="190">
+        </a>
+        <br><br><br>
+        <a onclick="switching('Dashboard')"><i class="fa fa-fw fa-tachometer"></i> Dashboard</a>
+        <a onclick="switching('list-produit')"><i class="fa fa-fw  fa-shopping-bag"></i> Products</a>
+        <a onclick="switching('categorie')"><i class="fa fa-fw fa-book"></i> Catalogue</a>
+          <a onclick="switching('orders')"><i class="fa fa-fw fa-book"></i> Orders</a>
+        <a href=""><i class="fa fa-fw fa-user"></i>Users</a>
+        <a href="index.html"><i class="fa fa-fw fa-user"></i> Logout</a>
+
+    </div>
+
+    <main>
+
+        <div class="row">
+
+            <!-- SEARCH BAR -->
+            <div id="search-bar" class="col-md-8" style="margin-top: 20px; margin-left:50px">
+                <div class="header-search">
+                    <form>
+                        {% csrf_token %}
+
+									{% if form.errors %}
+										{% for error in form.errors %}
+												{{ error }}
+										{% endfor %}
+									{% endif %}
+									<select class="input-select">
+										<option value="0">All Categories</option>
+										{% for catalog in catalogues %}
+										<option value="1">{{catalog.title}}</option>
+										{% endfor %}
+
+									</select>
+									<input class="input" placeholder="Search here" name="name" id="id_name">
+									<button class="search-btn" type="submit" >Search</button>
+                    </form>
+                </div>
+            </div>
+            <!-- /SEARCH BAR -->
+
+
+            <div class="col-md-15 clearfix">
+                <div class="header-ctn" style="margin-top:20px; margin-right : -50px">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-bell-o" style="color:#162C38"></i>
+                            <span style="color:#162C38">Notification</span>
+                            <div class="qty">2</div>
+                            <!-- <div class="qty">2</div> -->
+                        </a>
+                        <div class="cart-dropdown">
+                            <div class="cart-list">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-cog" style="color:#162C38"></i>
+                            <span style="color:#162C38">Setting</span>
+                        </a>
+                        <div class="cart-dropdown">
+                            <div class="cart-list">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="list-produit" style="visibility: hidden;">
+
+            <div class="section-admin">
+                <!-- SECTION -->
+                <div class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="section-title">
+                                <h3 class="title">List of Products</h3>
+                                <div class="product-btns-admin">
+                                    <button class="btn-ajo" type="button" onclick="switching('ajout-produit')"> Ajouter
+                                        produit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
+                            <!-- product -->
+                            {% for product in products %}
+                            							{% if not product.is_archived  %}
+
+                            <div class="col-md-4 col-xs-6">
+                                <div class="product">
+                                    <div class="product-img">
+                                        <img src="{{product.imageURL}}" alt="">
+                                        <div class="product-label">
+                                            <span class="sale">{{product.getremise}}%</span>
+{% if product.is_new %}
+													<span class="new">NEW</span>
+													{% endif %}                                        </div>
+                                    </div>
+                                    <div class="product-body">
+                                        <p class="product-category">{{product.catalog}}</p>
+                                        <h3 class="product-name"><a href="#">{{product.name}}</a></h3>
+                                        <h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.price}}</del>
+                                        </h4>
+                                        <div class="product-rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                        <div class="product-btns-admin">
+
+                                            <button class="btn-mod" onclick="show_modif_produit()" type="button"> modifier</button>
+                                            <button class="btn-sup" onclick="show_supp_produit()" type="button">supprimer</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif%}
+                            {% endfor%}
+
+                            <div class="clearfix visible-sm visible-xs"></div>
+
+                        </div>
+                        <!-- /store products -->
+
+                        <!-- store bottom filter -->
+                        <div class="store-filter clearfix">
+                            <span class="store-qty">Showing 20-100 products</span>
+                            <ul class="store-pagination">
+                                <li class="active">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /store bottom filter -->
+                    </div>
+                    <!-- /STORE -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /SECTION -->
+
+        <div id="categorie" style="visibility: hidden;">
+
+            <div class="section-admin">
+                <!-- SECTION -->
+                <div class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="section-title">
+                                <h3 class="title">List of Categories</h3>
+                                <div class="product-btns-admin">
+                                    <button class="btn-ajo" type="button" onclick="switching('ajout-categorie')"> Ajouter
+                                        Categorie </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
+                            {% for catalog in catalogues %}
+                            <div class="col-md-4 col-xs-6">
+                                <div class="product">
+                                    <div class="product-body">
+                                        <!-- <p class="product-category">Category</p> -->
+                                        <h3 class="catigory-name"><a href="#"> {{catalog.title}}</a></h3>
+                                        <div class="product-rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                        <div class="product-btns-admin">
+
+                                            <button class="btn-mod" type="button" onclick="show_modif_categorie()"> modifier </button>
+                                            <button class="btn-sup" type="button" onclick="show_supp_categorie()"> supprimer </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /product -->
+                            {% endfor %}
+
+                            <div class="clearfix visible-sm visible-xs"></div>
+
+                        </div>
+                        <!-- /store products -->
+
+                        <!-- store bottom filter -->
+                        <div class="store-filter clearfix">
+                            <span class="store-qty">Showing 20-100 products</span>
+                            <ul class="store-pagination">
+                                <li class="active">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /store bottom filter -->
+                    </div>
+                    <!-- /STORE -->
+                </div>
+                <!-- /row -->
+            </div>
+
+        </div>
+
+        <!--ajouter categorie -->
+        <div id="ajout-categorie" style="visibility: hidden;">
+
+          <div class="container">
+              <div class="grouped">
+                  <div class="row justify-content-center ">
+                      <div class="col-md-4">
+                        <br><br>
+                          <a onclick="switching('list-produit')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                          <div class="section-title">
+                              <h3 class="title">Ajouter categorie</h3>
+                          </div>
+                          <br>
+                          <div>
+                              <form method='POST' action="" enctype="multipart/form-data">
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Name</label>
+                                      <input required name="description" type="text"
+                                          placeholder="Enter the name of the categorie" class="form-control">
+                                  </div>
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Description</label>
+                                      <input required name="description" type="text"
+                                          placeholder="Enter the description of the categorie" class="form-control">
+                                  </div>
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Upload Principal image</label>
+                                      <input required name="image" type="file" class="form-control-file">
+                                  </div>
+
+                                  <button type='submit' class="btn btn-primary m-3" style="margin:30px 30px 30px 400px" >Submit</button>
+                                  <br><br><br>
+
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+        <!--ajouter categorie -->
+
+        <!--modifier categorie -->
+        <div id="modif-categorie" style="visibility: hidden;">
+
+          <div class="container">
+              <div class="grouped">
+                  <div class="row justify-content-center ">
+                      <div class="col-md-4">
+                        <br><br>
+                          <a onclick="switching('list-produit')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                          <div class="section-title">
+                              <h3 class="title">Modifer categorie</h3>
+                          </div>
+                          <br>
+                          <div>
+                              <form method='POST' action="" enctype="multipart/form-data">
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Name</label>
+                                      <input required name="description" type="text"
+                                          placeholder="Enter the name of the categorie" class="form-control">
+                                  </div>
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Description</label>
+                                      <input required name="description" type="text"
+                                          placeholder="Enter the description of the categorie" class="form-control">
+                                  </div>
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Upload Principal image</label>
+                                      <input required name="image" type="file" class="form-control-file">
+                                  </div>
+
+                                  <button type='submit' class="btn btn-primary m-3" style="margin:30px 30px 30px 400px" >Submit</button>
+                                  <br><br><br>
+
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+        <!--modifier categorie -->
+
+        <!--ajouter produit -->
+        <div id="ajout-produit" style="visibility: hidden;">
+
+            <div class="container">
+                <div class="grouped">
+                    <div class="row justify-content-center ">
+                        <div class="col-md-4">
+                          <br><br>
+                            <a onclick="switching('list-produit')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                            <div class="section-title">
+                                <h3 class="title">Ajouter produit</h3>
+                            </div>
+                            <br>
+                            <div>
+                                <form method='POST' action="" enctype="multipart/form-data">
+
+                                    <div class="form-group m-3" style="width:50%">
+                                        <label>Name</label>
+                                        <input required name="description" type="text"
+                                            placeholder="Enter the name of the product" class="form-control">
+                                    </div>
+                                    <div class="form-group m-3" style="width:50%">
+                                        <label>Price</label>
+                                        <input required name="description" type="number" min="1"
+                                            placeholder="Enter the price of the product" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-checkbox">
+                                            <input type="checkbox" id="a">
+                                            <label for="a">
+                                                <span class="spn"></span>
+                                                Price reduction ?
+                                            </label>
+                                            <div class="caption">
+                                                <div class="form-group">
+                                                    <input class="input-a" type="number" name="prix"
+                                                        placeholder="Promotion">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group m-3" style="width:50%">
+                                        <label>Select a category</label>
+                                        <select name="category" class="form-control">
+                                            {% for catalog in catalogues %}
+                                            <option value="{{catalog.title}}"></option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group m-3" style="width:50%">
+                                        <label>Select a brand</label>
+                                        <select name="category" class="form-control">
+                                            <option value='none'>Select a brand...</option>
+                                            <option value='1'>Apple</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group m-3" style="width:50%">
+                                        <label>Add it to the Archive List </label>
+                                        <select required name="category" class="form-control">
+                                            <option value='0'>Yes</option>
+                                            <option value='1' selected>No</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group m-3" style="width:50%">
+                                        <label>Upload Principal image</label>
+                                        <input required name="image" type="file" class="form-control-file">
+                                    </div>
+
+
+
+                                    <div class="form-group m-3" style="width:50%">
+                                        <label>Upload other images</label>
+                                        <input required name="images" type="file" multiple class="form-control-file">
+                                    </div>
+
+                                    <button type='submit' class="btn btn-primary m-3" style="margin:30px 30px 30px 400px" >Submit</button>
+                                    <br><br><br>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--ajouter produit -->
+
+        <!--modifier produit -->
+        <div id="modif-produit" style="visibility: hidden;">
+
+          <div class="container">
+              <div class="grouped">
+                  <div class="row justify-content-center ">
+                      <div class="col-md-4">
+                        <br><br>
+                          <a onclick="switching('list-produit')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                          <div class="section-title">
+                              <h3 class="title">Modifer produit</h3>
+                          </div>
+                          <br>
+                          <div>
+                              <form method='POST' action="" enctype="multipart/form-data">
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Name</label>
+                                      <input required name="description" type="text"
+                                          placeholder="Enter the name of the product" class="form-control">
+                                  </div>
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Price</label>
+                                      <input required name="description" type="number" min="1"
+                                          placeholder="Enter the price of the product" class="form-control">
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="input-checkbox">
+                                          <input type="checkbox" id="a">
+                                          <label for="a">
+                                              <span class="spn"></span>
+                                              Price reduction ?
+                                          </label>
+                                          <div class="caption">
+                                              <div class="form-group">
+                                                  <input class="input-a" type="number" name="prix"
+                                                      placeholder="Promotion">
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Select a category</label>
+                                      <select name="category" class="form-control">
+                                          <option value='none'>Select a category...</option>
+                                          <option value='1'>Phones</option>
+                                      </select>
+                                  </div>
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Select a brand</label>
+                                      <select name="category" class="form-control">
+                                          <option value='none'>Select a brand...</option>
+                                          <option value='1'>Apple</option>
+                                      </select>
+                                  </div>
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Add it to the Archive List </label>
+                                      <select required name="category" class="form-control">
+                                          <option value='0'>Yes</option>
+                                          <option value='1' selected>No</option>
+                                      </select>
+                                  </div>
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Upload Principal image</label>
+                                      <input required name="image" type="file" class="form-control-file">
+                                  </div>
+
+
+
+                                  <div class="form-group m-3" style="width:50%">
+                                      <label>Upload other images</label>
+                                      <input required name="images" type="file" multiple class="form-control-file">
+                                  </div>
+
+                                  <button type='submit' class="btn btn-primary m-3" style="margin:30px 30px 30px 400px" >Submit</button>
+                                  <br><br><br>
+
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <!--modifier produit -->
+
+        <div id="Dashboard" class="activated" style="visibility: visible;">
+
+            <div class="row">
+                <div class="column" style="background-color: #162C38">
+                    <h3>Produit</h3>
+                    <br>
+                    <h3>15</h3>
+                </div>
+                <div class="column" style="background-color: #248074">
+                    <h3>Categories</h3>
+                    <br>
+                    <h3>5</h3>
+                </div>
+                <div class="column" style="background-color: #fcc446">
+                    <h3>Admin</h3>
+                    <br>
+                    <h3>6</h3>
+                </div>
+                <div class="column" style="background-color: #D05543">
+                    <h3>Utilisateur</h3>
+                    <br>
+                    <h3>150</h3>
+                </div>
+            </div>
+
+
+            <div class="row" id="tableau">
+                <div class="col-8 col-m-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                Orders
+                            </h3>
+
+                        </div>
+                        <div class="card-content">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>ID Order</th>
+                                        <th>Product</th>
+                                        <th>Status</th>
+                                        <th>Due date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>111</td>
+                                        <td>Pc</td>
+                                        <td>
+                                            <span class="dot">
+                                                <i class="bg-success"></i>
+                                                Completed
+                                            </span>
+                                        </td>
+                                        <td>17/07/2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>222</td>
+                                        <td>telephone</td>
+                                        <td>
+                                            <span class="dot">
+                                                <i class="bg-warning"></i>
+                                                In progress
+                                            </span>
+                                        </td>
+                                        <td>18/07/2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>333</td>
+                                        <td>camera</td>
+                                        <td>
+                                            <span class="dot">
+                                                <i class="bg-warning"></i>
+                                                In progress
+                                            </span>
+                                        </td>
+                                        <td>17/07/2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>444</td>
+                                        <td>accessoire</td>
+                                        <td>
+                                            <span class="dot">
+                                                <i class="bg-danger"></i>
+                                                Delayed
+                                            </span>
+                                        </td>
+                                        <td>07/07/2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>555</td>
+                                        <td>pc</td>
+                                        <td>
+                                            <span class="dot">
+                                                <i class="bg-primary"></i>
+                                                Pending
+                                            </span>
+                                        </td>
+                                        <td>20/08/2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>666</td>
+                                        <td>pc</td>
+                                        <td>
+                                            <span class="dot">
+                                                <i class="bg-primary"></i>
+                                                Pending
+                                            </span>
+                                        </td>
+                                        <td>20/08/2020</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row" id="chart">
+                <div class="col-12 col-m-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                Chartjs
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="orders" class="activated" style="visibility: hidden;">
+
+          <div class="row" id="tableau">
+              <div class="col-8 col-m-12 col-sm-12">
+                  <div class="card">
+                      <div class="card-header">
+                          <h3>
+                              Orders
+                          </h3>
+
+                      </div>
+                      <div class="card-content">
+                          <table>
+                              <thead>
+                                  <tr>
+                                      <th>#</th>
+                                      <th>ID Order</th>
+                                      <th>Product</th>
+                                      <th>Status</th>
+                                      <th>Due date</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr onclick="switching('order-details')">
+                                      <td>1</td>
+                                      <td>111</td>
+                                      <td>Pc</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-success"></i>
+                                              Completed
+                                          </span>
+                                      </td>
+                                      <td>17/07/2020</td>
+                                  </tr>
+                                  <tr onclick="switching('order-details')">
+                                      <td>2</td>
+                                      <td>222</td>
+                                      <td>telephone</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-warning"></i>
+                                              In progress
+                                          </span>
+                                      </td>
+                                      <td>18/07/2020</td>
+                                  </tr>
+                                  <tr>
+                                      <td>3</td>
+                                      <td>333</td>
+                                      <td>camera</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-warning"></i>
+                                              In progress
+                                          </span>
+                                      </td>
+                                      <td>17/07/2020</td>
+                                  </tr>
+                                  <tr onclick="switching('order-details')">
+                                      <td>4</td>
+                                      <td>444</td>
+                                      <td>accessoire</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-danger"></i>
+                                              Delayed
+                                          </span>
+                                      </td>
+                                      <td>07/07/2020</td>
+                                  </tr>
+                                  <tr onclick="switching('order-details')">
+                                      <td>5</td>
+                                      <td>555</td>
+                                      <td>pc</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-primary"></i>
+                                              Pending
+                                          </span>
+                                      </td>
+                                      <td>20/08/2020</td>
+                                  </tr>
+                                  <tr onclick="switching('order-details')">
+                                      <td>6</td>
+                                      <td>666</td>
+                                      <td>pc</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-primary"></i>
+                                              Pending
+                                          </span>
+                                      </td>
+                                      <td>20/08/2020</td>
+                                  </tr>
+                                  <tr onclick="switching('order-details')">
+                                      <td>6</td>
+                                      <td>666</td>
+                                      <td>pc</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-primary"></i>
+                                              Pending
+                                          </span>
+                                      </td>
+                                      <td>20/08/2020</td>
+                                  </tr>
+                                  <tr onclick="switching('order-details')">
+                                      <td>6</td>
+                                      <td>666</td>
+                                      <td>pc</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-primary"></i>
+                                              Pending
+                                          </span>
+                                      </td>
+                                      <td>20/08/2020</td>
+                                  </tr>
+                                  <tr>
+                                      <td>6</td>
+                                      <td>666</td>
+                                      <td>pc</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-primary"></i>
+                                              Pending
+                                          </span>
+                                      </td>
+                                      <td>20/08/2020</td>
+                                  </tr>
+                                  <tr onclick="switching('order-details')">
+                                      <td>6</td>
+                                      <td>666</td>
+                                      <td>pc</td>
+                                      <td>
+                                          <span class="dot">
+                                              <i class="bg-primary"></i>
+                                              Pending
+                                          </span>
+                                      </td>
+                                      <td>20/08/2020</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+          <br>
+
+        </div>
+
+        <div id="order-details" class="activated" style="visibility: hidden;">
+            <a >
+                <a onclick="switching('orders')">
+                    <img src="img\icons-left.png">
+                  </a>
+            </a>
+
+
+          <div class="row" id="tableau">
+              <div class="col-8 col-m-12 col-sm-12">
+
+                  <div class="card">
+                      <div class="card-header">
+                          <h3>
+                              Order details
+                          </h3>
+
+                      </div>
+                      <div class="card-content">
+
+
+
+                        <strong > ID order :</strong><span>1</span>
+                        <br>
+                        <strong > ID client :</strong><span>231</span>
+                        <br>
+                        <strong> Product :</strong><span> telephone , pc</span>
+                        <br>
+                        <strong>Status :</strong> <span>completed</span>
+                        <br>
+                        <strong> Due date :</strong> <span>19/08/2021</span>
+
+
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+
+
+
+        </div>
+
+    </main>
+
+    <!-- jQuery Plugins -->
+
+
+    <script type="text/javascript">
+
+        function show_Dashboard() {
+
+            document.getElementById('list-produit').style.display = "none";
+            document.getElementById('search-bar').style.display = "none";
+            document.getElementById('categorie').style.display = "none";
+            document.getElementById('ajout-produit').style.display = "none";
+            document.getElementById('modif-categorie').style.display = "none";
+            document.getElementById('modif-produit').style.display = "none";
+            document.getElementById('Dashboard').style.display = "block";
+
+        };
+
+        function show_categorie() {
+
+            document.getElementById('Dashboard').style.display = "none";
+            document.getElementById('list-produit').style.display = "none";
+            document.getElementById('ajout-produit').style.display = "none";
+            document.getElementById('ajout-categorie').style.display = "none";
+            document.getElementById('modif-categorie').style.display = "none";
+            document.getElementById('modif-produit').style.display = "none";
+            document.getElementById('search-bar').style.display = "block";
+            document.getElementById('categorie').style.display = "block";
+
+        };
+        function show_list_products() {
+            document.getElementById('categorie').style.display = "none";
+            document.getElementById('Dashboard').style.display = "none";
+            document.getElementById('ajout-categorie').style.display = "none";
+            document.getElementById('ajout-produit').style.display = "none";
+            document.getElementById('modif-categorie').style.display = "none";
+            document.getElementById('modif-produit').style.display = "none";
+            document.getElementById('search-bar').style.display = "block";
+            document.getElementById('list-produit').style.display = "block";
+
+
+
+        }
+        function show_add_categorie() {
+            document.getElementById('Dashboard').style.display = "none";
+            document.getElementById('categorie').style.display = "none";
+            document.getElementById('ajout-produit').style.display = "none";
+            document.getElementById('search-bar').style.display = "none";
+            document.getElementById('ajout-categorie').style.display = "block";
+
+            return true;
+        }
+        function show_add_produit() {
+            document.getElementById('Dashboard').style.display = "none";
+            document.getElementById('list-produit').style.display = "none";
+            document.getElementById('search-bar').style.display = "none";
+            document.getElementById('ajout-categorie').style.display = "none";
+            document.getElementById('modif-categorie').style.display = "none";
+            document.getElementById('modif-produit').style.display = "none";
+            document.getElementById('ajout-produit').style.display = "block";
+            return true;
+        }
+        function show_modif_produit() {
+            document.getElementById('Dashboard').style.display = "none";
+            document.getElementById('list-produit').style.display = "none";
+            document.getElementById('search-bar').style.display = "none";
+            document.getElementById('ajout-categorie').style.display = "none";
+            document.getElementById('ajout-produit').style.display = "none";
+            document.getElementById('modif-categorie').style.display = "none";
+            document.getElementById('modif-produit').style.display = "block";
+            return true;
+        }
+        function show_modif_categorie() {
+            document.getElementById('Dashboard').style.display = "none";
+            document.getElementById('list-produit').style.display = "none";
+            document.getElementById('search-bar').style.display = "none";
+            document.getElementById('categorie').style.display = "none";
+            document.getElementById('ajout-categorie').style.display = "none";
+            document.getElementById('ajout-produit').style.display = "none";
+            document.getElementById('modif-produit').style.display = "none";
+            document.getElementById('modif-categorie').style.display = "block";
+            return true;
+        }
+
+
+
+
+        imgInp.onchange = evt => {
+          const [file] = imgInp.files
+          if (file) {
+            igg.src = URL.createObjectURL(file)
+          }
+        }
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+
+
+    <script>
+              const dropArea = document.querySelector(".drag-area"),
+          dragText = dropArea.querySelector("header"),
+          button = dropArea.querySelector("button"),
+          input = dropArea.querySelector("input");
+          let file; //this is a global variable and we'll use it inside multiple functions
+
+          button.onclick = ()=>{
+          input.click(); //if user click on the button then the input also clicked
+          }
+
+          input.addEventListener("change", function(){
+          //getting user select file and [0] this means if user select multiple files then we'll select only the first one
+          file = this.files[0];
+          dropArea.classList.add("active");
+          showFile(); //calling function
+          });
+
+
+          //If user Drag File Over DropArea
+          dropArea.addEventListener("dragover", (event)=>{
+          event.preventDefault(); //preventing from default behaviour
+          dropArea.classList.add("active");
+          dragText.textContent = "Release to Upload File";
+          });
+
+          //If user leave dragged File from DropArea
+          dropArea.addEventListener("dragleave", ()=>{
+          dropArea.classList.remove("active");
+          dragText.textContent = "Drag & Drop to Upload File";
+          });
+
+          //If user drop File on DropArea
+          dropArea.addEventListener("drop", (event)=>{
+          event.preventDefault(); //preventing from default behaviour
+          //getting user select file and [0] this means if user select multiple files then we'll select only the first one
+          file = event.dataTransfer.files[0];
+          showFile(); //calling function
+          });
+
+          function showFile(){
+          let fileType = file.type; //getting selected file type
+          let validExtensions = ["image/jpeg", "image/jpg", "image/png"]; //adding some valid image extensions in array
+          if(validExtensions.includes(fileType)){ //if user selected file is an image file
+          let fileReader = new FileReader(); //creating new FileReader object
+          fileReader.onload = ()=>{
+            let fileURL = fileReader.result; //passing user file source in fileURL variable
+
+            let imgTag = `<img src="${fileURL}" alt="image">`; //creating an img tag and passing user selected file source inside src attribute
+            dropArea.innerHTML = imgTag; //adding that created img tag inside dropArea container
+          }
+          fileReader.readAsDataURL(file);
+          }else{
+          alert("This is not an Image File!");
+          dropArea.classList.remove("active");
+          dragText.textContent = "Drag & Drop to Upload File";
+          }
+          }
+    </script>
+
+
+
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/nouislider.min.js"></script>
+    <script src="js/jquery.zoom.min.js"></script>
+    <script src="js/main2.js"></script>
+    <script src="js/chart.js">
+
+    </script>
+
+</body>
+
+</html>
