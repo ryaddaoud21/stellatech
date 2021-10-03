@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Stella Tech</title>
+
+		<!-- Google font -->
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+
+
+		<!-- Bootstrap -->
+		<link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css'%} "/>
+
+		<!-- Slick -->
+		<link type="text/css" rel="stylesheet" href="{% static 'css/slick.css' %}"/>
+		<link type="text/css" rel="stylesheet" href="{% static 'css/slick-theme.css' %}"/>
+		<!-- nouislider -->
+		<link type="text/css" rel="stylesheet" href="{% static 'css/nouislider.min.css'%}"/>
+		<!-- Font Awesome Icon -->
+		<link rel="stylesheet" href="static/css/font-awesome.min.css">
+		<!-- Custom stlylesheet -->
+		<link type="text/css" rel="stylesheet" href="{% static  'css/style2.css'%} "/>
+		<link type="text/css" rel="stylesheet" href="{% static  'css/st.css'%} "/>
+		<link type="text/css" rel="stylesheet" href="{% static 'css/auty.css'%}"/>
+		<link rel="icon" href="img/logo-boutique1.ico" type="image/gif" sizes="16x16">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+		 <script type="text/javascript">
+    var user= '{{request.user}}'
+    function getToken(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getToken('csrftoken');
+
+
+
+
+
+
+  </script>
+
+
+
+    </head>
+	<body>
+		<div id="myContainer">
+		<!-- HEADER -->
+				<header>
+					<!-- MAIN HEADER -->
+					<div id="header">
+						<!-- container -->
+						<div class="container">
+							<!-- row -->
+							<div class="row">
+								<!-- LOGO -->
+								<div class="col-md-3">
+									<div class="header-logo">
+										<a href="#" class="logo">
+											<img src="{% static 'img/LOGOO.png'%}" alt="" width="250" >
+										</a>
+									</div>
+								</div>
+								<!-- /LOGO -->
+
+								<!-- SEARCH BAR -->
+								<div class="col-md-6">
+									<div class="header-search">
+										<form method="GET">
+											{% csrf_token %}
+
+											{% if form.errors %}
+												{% for error in form.errors %}
+														{{ error }}
+												{% endfor %}
+											{% endif %}
+											<select class="input-select">
+												<option value="0">All Categories</option>
+
+
+											</select>
+											<input class="input" placeholder="Search here" name="name" id="id_name">
+											<button class="search-btn" type="submit" >Search</button>
+										</form>
+									</div>
+								</div>
+								<!-- /SEARCH BAR -->
+
+								<!-- ACCOUNT -->
+								<div class="col-md-3 clearfix">
+									<div class="header-ctn">
+										<!-- Wishlist -->
+										<div class="dropdown">
+											<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+												<i class="fa fa-heart"></i>
+												<span>Your Wish</span>
+													<div class="qty" id="wish-total"> {{wishItems}} </div>
+												<!-- <div class="qty">3</div> -->
+											</a>
+											<div class="cart-dropdown">
+												<div class="cart-list">
+													{% for item in items2 %}
+													<div class="product-widget">
+														<div class="product-img">
+															<img src="{{item.product.imageURL}}" alt="">
+														</div>
+														<div class="product-body">
+															<h3 class="product-name"><a href="#">{{item.product.name}}</a></h3>
+															<h4 class="product-price"><span class="qty">{{item.quantity}}x</span>${{item.product.price}}</h4>
+														</div>
+														<button data-product="{{item.product.id}}" data-action="delete-wish" class="delete update-wish "><i class="fa fa-close update-wish"></i></button>
+													</div>
+
+													{% endfor %}
+
+
+
+												</div>
+												<div class="cart-summary">
+													<small>{{wish.get_wish_items}} Item(s) selected</small>
+												</div>
+												<div class="cart-btns">
+{% if request.user.is_authenticated %}
+													<a href="{% url 'account' request.user.customer.id %}">View Profile</a>
+													{% else %}
+													<a href="{% url 'login'  %}">View Profile</a>
+
+													{% endif %}													<a href="{% url 'profile' %}">View details  <i class="fa fa-arrow-circle-right"></i></a>
+												</div>
+											</div>
+
+										</div>
+										<!-- /Wishlist -->
+
+										<!-- Cart -->
+										<div class="dropdown">
+											<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+												<i class="fa fa-shopping-cart"></i>
+												<span>Your Cart</span>
+													<div class="qty" id="cart-total"> {{cartItems}} </div>
+												<!-- <div class="qty">3</div> -->
+											</a>
+											<div class="cart-dropdown">
+												<div class="cart-list">
+													{% for item in items%}
+													<div class="product-widget">
+														<div class="product-img">
+															<img src="{{item.product.imageURL}}" alt="">
+														</div>
+														<div class="product-body">
+															<h3 class="product-name"><a href="#">{{item.product.name}}</a></h3>
+															<h4 class="product-price"><span class="qty">{{item.quantity}}x</span>${{item.product.price}}</h4>
+														</div>
+														<button data-product="{{item.product.id}}" data-action="delete" class="delete update-cart "><i class="fa fa-close update-cart"></i></button>
+													</div>
+
+																								{% endfor %}
+
+
+
+												</div>
+												<div class="cart-summary">
+													<small>{{order.get_cart_items}} Item(s) selected</small>
+													<h5>SUBTOTAL: ${{order.get_total_cart}}</h5>
+												</div>
+												<div class="cart-btns">
+													<a  href="{% url 'cart' %}">View Cart</a>
+													<a  href="{% url 'checkout' %}">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+												</div>
+											</div>
+										</div>
+										<!-- /Cart -->
+
+
+
+
+											{% if  request.user.is_authenticated %}
+											<div class="dropdown">
+											<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+												<i class="fa fa-user"></i>
+												<span> Your Account</span>
+												<!-- <div class="qty">3</div> -->
+											</a>
+
+											<div class="cart-dropdown">
+
+												<div class="cart-summary">
+													<h4>Username: {{request.user.username}}</h4>
+													<small>Settings </small>
+
+												</div>
+												<div class="cart-btns">
+													{% if request.user.is_authenticated %}
+													<a href="{% url 'account' request.user.customer.id %}">View Profile</a>
+													{% else %}
+													<a href="{% url 'login'  %}">View Profile</a>
+
+													{% endif %}
+													<a href="{% url 'logout' %}">Logout  <i class="fa fa-arrow-circle-right"></i></a>
+												</div>
+											</div>
+											{% else %}
+
+												<div class="box">
+													<a href="{% url 'login' %}" style="cursor: pointer">
+														<i class="fa fa-user"></i>
+														<a href="{% url 'login' %}"><span>Login</span></a>
+														<!-- <div class="qty">2</div> -->
+													</a>
+												</div>
+
+											{% endif %}
+
+
+
+
+
+
+
+										<!-- Menu Toogle -->
+										<div class="menu-toggle">
+											<a href="#">
+												<i class="fa fa-bars"></i>
+												<span>Menu</span>
+											</a>
+										</div>
+										<!-- /Menu Toogle -->
+									</div>
+								</div>
+								<!-- /ACCOUNT -->
+							</div>
+							<!-- row -->
+						</div>
+						</div>
+						</div>
+						<!-- container -->
+					<!-- /MAIN HEADER -->
+
+
+				</header>
+
+				<!-- /HEADER -->
+				<!-- NAVIGATION -->
+				<nav id="navigation">
+					<!-- container -->
+					<div class="container">
+						<!-- responsive-nav -->
+						<div id="responsive-nav">
+							<!-- NAV -->
+							<ul class="main-nav nav navbar-nav">
+								<li class="active"><a href="{% url 'homepage' %}">Home</a></li>
+								<li  ><a href="{% url 'categorypage' %}">Categories</a></li>
+								<li  ><a href="{% url 'brandspage' %}">Brands</a></li>
+								<li ><a href="{% url 'bestdealpage' %}">Best Deals</a></li>
+								<li><a href="{% url 'topsellingpage' %}">Top selling</a></li>
+							</ul>
+							<!-- /NAV -->
+						</div>
+						<!-- /responsive-nav -->
+					</div>
+					<!-- /container -->
+				</nav>
+				<!-- /NAVIGATION -->
+				<div class="section">
+					<!-- container -->
+					<div class="container">
+						<!-- row -->
+						<div class="row">
+
+
+							<!-- section title -->
+							<div class="col-md-12">
+								<div class="carousel slide carousel-fade hidden-xs" id="featured">
+
+     <!--Indicators-->
+     <ol class="carousel-indicators">
+       <li data-target="#featured" data-slide-to="0" class="active indicator"></li>
+       <li data-target="#featured" data-slide-to="1" class="indicator"></li>
+       <li data-target="#featured" data-slide-to="2" class="indicator"></li>
+     </ol>
+
+     <div class="carousel-inner">
+        <div class="item active">
+          <img class="carousel-image" src="{% static 'img/banner01.png'%}" alt="banner 1" style="    height: 10pc;width:75pc;">
+          <div class="carousel-caption animated fadeInUp" id="caption1-text">
+          </div>
+          <div class="carousel-caption animated fadeInUp" id="caption1-button">
+          </div>
+        </div>
+        <div class="item">
+          <img class="carousel-image" src="{% static 'img/banner02.png'%}" alt="banner 2" style="    height: 10pc;width:75pc;">
+          <div class="carousel-caption animated fadeInUp">
+          </div>
+          <div class="carousel-caption animated fadeInUp" id="caption2-button">
+          </div>
+        </div>
+        <div class="item">
+          <img class="carousel-image" src="{% static 'img/banner03.png'%}" alt="banner 3" style="    height: 10pc;">
+          <div class="carousel-caption animated fadeInUp">
+          </div>
+          <div class="carousel-caption animated fadeInUp" id="caption3-button">
+          </div>
+        </div>
+     </div><!--carousel inner-->
+
+     <!--Previous Button-->
+     <a class="left carousel-control" href="#featured" role="button" data-slide="prev">
+<i class="bi bi-arrow-left-square"></i>
+
+     </a>
+     <!--Next Button-->
+     <a class="right carousel-control" href="#featured" role="button" data-slide="next">
+<i class="bi bi-arrow-right-square"></i>
+     </a>
+    </div><!--carousel-->
+								<br>
+							</div>
+							<div class="col-md-12">
+								<div class="section-title">
+
+									<h3 class="title">Categories</h3>
+
+									<div class="section-nav">
+
+										<ul class="section-tab-nav tab-nav">
+											<li class="active"> <a  href="{% url 'categorypage' %}"> Show More</a></li>
+
+										</ul>
+									</div>
+
+													</div>
+							</div>
+							<!-- /section title -->
+
+							<!-- Products tab & slick -->
+							<div class="col-md-12">
+								<div class="row">
+									<div class="products-tabs">
+										<!-- tab -->
+										<div  class="tab-pane active">
+											<div class="products-slick" data-nav="#slick-nav-1">
+													{% for catalog in catalogues %}
+
+													<div class="col-md-4 col-xs-6">
+														<div class="shop">
+															<div class="shop-img">
+																<img src="{{catalog.imageURL}}" alt="" width="300" height="250" >
+															</div>
+															<div class="shop-body">
+															 <a href="{% url 'ProductItem' catalog.id %}"><h3>{{catalog.title}}<br>Collection</h3> </a>
+																<a  href="{% url 'ProductItem' catalog.id %}" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+															</div>
+														</div>
+													</div>
+
+												{% endfor  %}
+
+											</div>
+
+										</div>
+
+										<!-- /tab -->
+
+									</div>
+
+								</div>
+
+							</div>
+
+
+							<!-- Products tab & slick -->
+						</div>
+
+						<!-- /row -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- SECTION -->
+
+
+				<!-- SECTION -->
+				<div class="section">
+					<!-- container -->
+					<div class="container">
+						<!-- row -->
+						<div class="row">
+
+							<!-- section title -->
+							<div class="col-md-12">
+								<div class="section-title">
+									<h3 class="title">New Products</h3>
+									<div class="section-nav">
+										<ul class="section-tab-nav tab-nav">
+											<li class="active"> <a  href="{% url 'bestdealpage' %}"> Show More</a></li>
+
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /section title -->
+
+							<!-- Products tab & slick -->
+							<div class="col-md-12">
+								<div class="row">
+									<div class="products-tabs">
+										<!-- tab -->
+										<div id="tab1" class="tab-pane active">
+											<div class="products-slick" data-nav="#slick-nav-1">
+												{% for product in products %}
+												{% if not product.is_archived  %}
+
+												<div class="product">
+
+
+													<a href="{% url 'product_details' product.id %}"  >
+													<div class="product-img" >
+
+													<img  src="{{product.imageURL}}" alt=""  width="200" height="400" >
+														<div class="product-label">
+															<span class="sale">{{product.getremise}}%</span>
+
+															{% if product.is_new %}
+															<span class="new">NEW</span>
+															{% endif %}
+														</div>
+													</div>
+												</a>
+													<div class="product-body">
+														<p class="product-category">{{product.catalog}}</p>
+
+														<h3 class="product-name"><a href="{% url 'product_details' product.id %}">{{product.name}}</a></h3>
+														<h4 class="product-price">${{product.price}}<del class="product-old-price">${{product.old_price}}</del></h4>
+														<div class="product-rating">
+																{% if 1 >= product.getrate  %}
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																{% elif  1 < product.getrate and product.getrate <= 2  %}
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																{% elif  2 < product.getrate  and product.getrate <= 3%}
+
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																{% elif 3 < product.getrate and product.getrate <= 4   %}
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star-o empty"></i>
+																{% elif 4 < product.getrate and product.getrate <= 5 %}
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																{% endif %}
+														</div>
+
+														<div class="product-btns">
+															<button  data-product={{product.id}} data-action="add-wish" class="update-wish" ><i class="fa fa-heart-o update-wish "></i><span class="tooltipp update-wish">add to wishlist</span></button>
+															<button class="add-to-compare"><i class="fa fa-exchange" ></i><span class="tooltipp">add to compare</span></button>
+															<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+														</div>
+													</div>
+													<div class="add-to-cart">
+														<button data-product={{product.id}} data-action="add" class="add-to-cart-btn update-cart" > add to cart</button> <br>
+													</div>
+													</div>
+															{%endif%}
+															{%endfor%}
+
+											</div>
+
+
+										</div>
+
+										<!-- /tab -->
+
+									</div>
+
+								</div>
+
+							</div>
+
+
+							<!-- Products tab & slick -->
+						</div>
+
+						<!-- /row -->
+					</div>
+					<!-- /container -->
+				</div>
+
+
+				<!-- /SECTION -->
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+					<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+        </div>
+
+
+
+				<!-- HOT DEAL SECTION -->
+				<div id="hot-deal" class="section">
+					<!-- container -->
+					<div class="container">
+						<!-- row -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="hot-deal">
+									<ul class="hot-deal-countdown">
+										<li>
+											<div>
+												<h3>02</h3>
+												<span>Days</span>
+											</div>
+										</li>
+										<li>
+											<div>
+												<h3>10</h3>
+												<span>Hours</span>
+											</div>
+										</li>
+										<li>
+											<div>
+												<h3>34</h3>
+												<span>Mins</span>
+											</div>
+										</li>
+										<li>
+											<div>
+												<h3>60</h3>
+												<span>Secs</span>
+											</div>
+										</li>
+									</ul>
+									<h2 class="text-uppercase">Best Deal This Week</h2>
+									<p>New Collection Up to 50% OFF</p>
+									<a class="primary-btn cta-btn" href="#">Shop now</a>
+								</div>
+							</div>
+						</div>
+						<!-- /row -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /HOT DEAL SECTION -->
+
+				<!-- SECTION -->
+				<div class="section">
+					<!-- container -->
+					<div class="container">
+						<!-- row -->
+						<div class="row">
+
+							<!-- section title -->
+							<div class="col-md-12">
+								<div class="section-title">
+									<h3 class="title">flash deal</h3>
+									<div class="section-nav">
+										<ul class="section-tab-nav tab-nav">
+											<li class="active"><a data-toggle="tab" href="{% url 'bestdealpage' %}">Show More</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /section title -->
+
+							<!-- Products tab & slick -->
+							<div class="col-md-12">
+								<div class="row">
+									<div class="products-tabs">
+										<!-- tab -->
+										<div id="tab2" class="tab-pane fade in active">
+											<div class="products-slick" data-nav="#slick-nav-2">
+												{%for product in products %}
+												{% if  product.is_flash_deal and not product.is_archived  %}
+
+												<!-- product -->
+												<div class="product">
+														<a href="./product.html" >
+													<div class="product-img">
+														<img src="{{product.imageURL}}" alt="">
+														<div class="product-label">
+															<span class="sale">{{product.getremise}}%</span>
+
+															{% if product.is_new %}
+															<span class="new">NEW</span>
+															{% endif %}
+														</div>
+													</div>
+
+												</a>
+													<div class="product-body">
+														<p class="product-category">{{product.catalog}}</p>
+														<h3 class="product-name"><a href="{% url 'product_details' product.id %}">{{product.name}}</a></h3>
+														<h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.old_price}}</del></h4>
+														<div class="product-rating">
+																{% if 1 >= product.getrate  %}
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																{% elif  1 < product.getrate and product.getrate <= 2  %}
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																{% elif  2 < product.getrate  and product.getrate <= 3%}
+
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star-o empty"></i>
+																<i class="fa fa-star-o empty"></i>
+																{% elif 3 < product.getrate and product.getrate <= 4   %}
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star-o empty"></i>
+																{% elif 4 < product.getrate and product.getrate <= 5 %}
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																<i class="fa fa-star"></i>
+																{% endif %}
+														</div>
+														<div class="product-btns">
+															<button  data-product={{product.id}} data-action="add-wish" class="update-wish" ><i class="fa fa-heart-o update-wish "></i><span class="tooltipp update-wish">add to wishlist</span></button>
+															<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+															<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+														</div>
+													</div>
+													<div class="add-to-cart">
+														<button data-product={{product.id}} data-action="add" class="add-to-cart-btn update-cart" > add to cart</button>
+													</div>
+												</div>
+												<!-- /product -->
+
+												{% endif  %}
+												{% endfor  %}
+
+
+											</div>
+											<div id="slick-nav-2" class="products-slick-nav"></div>
+										</div>
+										<!-- /tab -->
+									</div>
+								</div>
+							</div>
+							<!-- /Products tab & slick -->
+						</div>
+						<!-- /row -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /SECTION -->
+
+				<!-- SECTION -->
+				<div class="section">
+					<!-- container -->
+					<div class="container">
+						<!-- row -->
+						<div class="row">
+							<div class="col-md-4 col-xs-6">
+								<div class="section-title">
+									<h4 class="title">Top selling</h4>
+									<div class="section-nav">
+										<div id="slick-nav-3" class="products-slick-nav"></div>
+									</div>
+								</div>
+
+								<div class="products-widget-slick" data-nav="#slick-nav-3">
+									<div>
+										<!-- product widget -->
+										{% for product in products %}
+											{% if product.is_top_selling and not product.is_archived %}
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="{{product.imageURL}}" alt="">
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{product.category}}</p>
+												<h3 class="product-name"><a href="{% url 'product_details' product.id %}">{{product.name}}</a></h3>
+												<h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.old_price}}</del></h4>
+											</div>
+										</div>
+										{% endif %}
+										{% endfor %}
+										<!-- /product widget -->
+
+
+									</div>
+
+									<div>
+											<!-- product widget -->
+										{% for product in products %}
+											{% if product.is_top_selling  and not product.is_archived %}
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="{{product.imageURL}}" alt="">
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{product.category}}</p>
+												<h3 class="product-name"><a href="{% url 'product_details' product.id %}">{{product.name}}</a></h3>
+												<h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.old_price}}</del></h4>
+											</div>
+										</div>
+										{% endif %}
+										{% endfor %}
+										<!-- /product widget -->
+										<!-- product widget -->
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4 col-xs-6">
+								<div class="section-title">
+									<h4 class="title">Top ranking</h4>
+									<div class="section-nav">
+										<div id="slick-nav-4" class="products-slick-nav"></div>
+									</div>
+								</div>
+
+								<div class="products-widget-slick" data-nav="#slick-nav-4">
+									<div>
+											<!-- product widget -->
+										{% for product in products %}
+											{% if product.is_top_ranking and not product.is_archived %}
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="{{product.imageURL}}" alt="">
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{product.category}}</p>
+												<h3 class="product-name"><a href="{% url 'product_details' product.id %}">{{product.name}}</a></h3>
+												<h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.old_price}}</del></h4>
+											</div>
+										</div>
+										{% endif %}
+										{% endfor %}
+										<!-- /product widget -->
+									</div>
+									<div>
+											<!-- product widget -->
+										{% for product in products %}
+											{% if product.is_top_ranking and not product.is_archived %}
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="{{product.imageURL}}" alt="">
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{product.category}}</p>
+												<h3 class="product-name"><a href="{% url 'product_details' product.id %}">{{product.name}}</a></h3>
+												<h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.old_price}}</del></h4>
+											</div>
+										</div>
+										{% endif %}
+										{% endfor %}
+										<!-- /product widget -->
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix visible-sm visible-xs"></div>
+
+							<div class="col-md-4 col-xs-6">
+								<div class="section-title">
+									<h4 class="title">Top ranking</h4>
+									<div class="section-nav">
+										<div id="slick-nav-5" class="products-slick-nav"></div>
+									</div>
+								</div>
+
+								<div class="products-widget-slick" data-nav="#slick-nav-5">
+									<div>
+										<!-- product widget -->
+											<!-- product widget -->
+										{% for product in products %}
+											{% if product.is_flash_deal and not product.is_archived %}
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="{{product.imageURL}}" alt="">
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{product.category}}</p>
+												<h3 class="product-name"><a href="{% url 'product_details' product.id %}">{{product.name}}</a></h3>
+												<h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.old_price}}</del></h4>
+											</div>
+										</div>
+										{% endif %}
+										{% endfor %}
+										<!-- /product widget -->
+										<!-- /product widget -->
+
+										<!-- product widget -->
+
+										<!-- /product widget -->
+
+										<!-- product widget -->
+
+										<!-- product widget -->
+									</div>
+
+									<div>
+											<!-- product widget -->
+										{% for product in products %}
+											{% if product.is_flash_deal  and not product.is_archived %}
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="{{product.imageURL}}" alt="">
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{product.category}}</p>
+												<h3 class="product-name"><a href="{% url 'product_details' product.id %}">{{product.name}}</a></h3>
+												<h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.old_price}}</del></h4>
+											</div>
+										</div>
+										{% endif %}
+										{% endfor %}
+										<!-- /product widget -->
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<!-- /row -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /SECTION -->
+
+				<!-- NEWSLETTER -->
+				<div id="newsletter" class="section">
+					<!-- container -->
+					<div class="container">
+						<!-- row -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="newsletter">
+									<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+									<form>
+										<input class="input" type="email" placeholder="Enter Your Email">
+										<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+									</form>
+									<ul class="newsletter-follow">
+										<li>
+											<a href="#"><i class="fa fa-facebook"></i></a>
+										</li>
+										<li>
+											<a href="#"><i class="fa fa-twitter"></i></a>
+										</li>
+										<li>
+											<a href="#"><i class="fa fa-instagram"></i></a>
+										</li>
+										<li>
+											<a href="#"><i class="fa fa-pinterest"></i></a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- /row -->
+					</div>
+					<!-- /container -->
+
+				<!-- /NEWSLETTER -->
+
+				<!-- FOOTER -->
+				<footer id="footer">
+					<!-- top footer -->
+					<div class="section">
+						<!-- container -->
+						<div class="container">
+							<!-- row -->
+							<div class="row">
+								<div class="col-md-3 col-xs-6">
+									<div class="footer">
+										<h3 class="footer-title">About Us</h3>
+										<ul class="footer-links">
+											<li><a href="#"><i class="fa fa-map-marker"></i>EL WIAM SIDI BEL ABBES</a></li>
+											<li><a href="#"><i class="fa fa-phone"></i>043445879</a></li>
+											<li><a href="#"><i class="fa fa-envelope-o"></i>StellaTech@email.com</a></li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="col-md-3 col-xs-6">
+									<div class="footer">
+										<h3 class="footer-title">Categories</h3>
+										<ul class="footer-links">
+											{% for cat in catalogues %}
+											<li><a  href="{% url 'ProductItem' cat.id %}" >{{cat.title}}</a></li>
+											{% endfor %}
+
+										</ul>
+									</div>
+								</div>
+
+								<div class="clearfix visible-xs"></div>
+
+								<div class="col-md-3 col-xs-6">
+									<div class="footer">
+										<h3 class="footer-title">Information</h3>
+										<ul class="footer-links">
+											<li><a href="#">About Us</a></li>
+											<li><a href="#">Contact Us</a></li>
+											<li><a href="#">Privacy Policy</a></li>
+											<li><a href="#">Orders and Returns</a></li>
+											<li><a href="#">Terms & Conditions</a></li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="col-md-3 col-xs-6">
+									<div class="footer">
+										<h3 class="footer-title">Service</h3>
+										<ul class="footer-links">
+											<li><a href="#">My Account</a></li>
+											<li><a href="{% url 'cart' %}">View Cart</a></li>
+											<li><a href="{% url 'profile' %}">Wishlist</a></li>
+											<li><a href="{% url 'checkout' %}">Checkout</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /row -->
+						</div>
+						<!-- /container -->
+					</div>
+					<!-- /top footer -->
+
+					<!-- bottom footer -->
+					<div id="bottom-footer" class="section">
+						<div class="container">
+							<!-- row -->
+							<div class="row">
+								<div class="col-md-12 text-center">
+									<ul class="footer-payments">
+										<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+										<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
+										<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+										<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
+										<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
+										<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
+									</ul>
+
+								</div>
+							</div>
+								<!-- /row -->
+						</div>
+						<!-- /container -->
+					</div>
+					<!-- /bottom footer -->
+				</footer>
+				<!-- /FOOTER -->
+
+				</div>
+		</div>
+
+
+
+
+
+
+	<script>
+
+		function switching(id) {
+			const active = document.getElementsByClassName('Modal-content').item(0);
+			active.setAttribute('style', 'display : none;');
+			active.removeAttribute('class');
+			const newActive = document.getElementById(id);
+			newActive.setAttribute('class', 'Modal-content');
+			newActive.removeAttribute('style');
+			newActive.setAttribute('style', 'display : block;');
+		}
+		/*function login() {
+			document.getElementById('create').style.display = "none";
+			document.getElementById('login').style.display = "block";
+		}
+		function create_acc() {
+
+			document.getElementById('create').style.display = "block";
+			document.getElementById('login').style.display = "none";
+
+		}*/
+
+	</script>
+
+
+		<!-- jQuery Plugins -->
+		<script src="{% static 'js/jquery.min.js'%}  "></script>
+		<script src="{% static 'js/bootstrap.min.js'%}"></script>
+		<script src="{% static 'js/slick.min.js'%} "></script>
+		<script src="{% static 'js/nouislider.min.js'%}"></script>
+		<script src="{% static 'js/jquery.zoom.min.js'%}"></script>
+		<script src="{% static 'js/main.js'%}"></script>
+		<script src="{% static 'js/main2.js'%}"></script>
+		<script src="{% static 'js/main3.js'%}"></script>
+		<script type="text/javascript" src="{% static 'js/cart.js'%}"></script>
+		<script src="{% static 'js/popup.js'%}"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+		</div>
+	</body>
+</html>

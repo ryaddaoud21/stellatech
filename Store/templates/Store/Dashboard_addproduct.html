@@ -1,0 +1,11 @@
+{% extends 'Pharmacy/main.html' %}
+{% load static %}
+{% block content %}
+<div class="center-column">
+    <form method="POST" action="." enctype="multipart/form-data">
+		{% csrf_token %}
+		{{form.as_p}}
+        <input class="btn btn-primary" type="submit" name="apply">
+    </form>
+</div>
+{% endblock content %}

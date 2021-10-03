@@ -1,0 +1,78 @@
+{% extends 'Pharmacy/Main.html' %}
+{% load static %}
+{% block content %}
+
+{% if  request.user.is_superuser%}
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin - Free Bulma template</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <!-- Bulma Version 0.9.0-->
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/admin.css">
+</head>
+
+<body>
+
+    <!-- START NAV -->
+
+    <!-- END NAV -->
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3 ">
+                <aside class="menu is-hidden-mobile">
+                    <p class="menu-label">
+                        General
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li><a>Products</a></li>
+                        <li><a href="{% url 'dashboard_catalog' %}">Catalogues</a></li>
+                        <li><a>Customers</a></li>
+                        <li><a  href="{% url 'dashboard_brands' %}" >Brands</a></li>
+                        <li><a  class="is-active">Users</a></li>
+                        <li><a>Other</a></li>
+                    </ul>
+
+                </aside>
+            </div>
+            <div class="column is-9">
+                <nav class="breadcrumb" aria-label="breadcrumbs">
+                    <ul>
+                        <li><a href="{% url 'AddUser' %}" class="btn"> Add new user </a></li>
+
+                    </ul>
+                </nav>
+                <div class="row">
+                    {% for user in users %}
+						<div class="box">
+								<h6><strong>Name :</strong>{{user.name}}</h6>
+								<h6><strong>Address :</strong>{{user.Address}}</h6>
+								<h6><strong>Sex :</strong>{{user.Sex}}</h6>
+								<h6><strong>Date_birth :</strong>{{user.Date_birth}}</h6>
+								<h6><strong>Phone :</strong>{{user.Phone}}</h6>
+								<h6><strong>Email :</strong>{{user.Email}}</h6>
+
+						</div>
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script async type="text/javascript" src="../js/bulma.js"></script>
+</body>
+
+</html>
+{%  else  %}
+<h2> This is allowed only for superusers</h2>
+
+{%  endif %}
+
+{% endblock content %}

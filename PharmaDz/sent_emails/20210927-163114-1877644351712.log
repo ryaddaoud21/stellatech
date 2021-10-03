@@ -1,0 +1,26 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on 127.0.0.1:8000
+From: TestSite Team <noreply@example.com>
+To: m.daoud@esi-sba.dz
+Date: Mon, 27 Sep 2021 14:31:14 -0000
+Message-ID: 
+ <163275307401.18332.268099265798071226@DESKTOP-MJBRG8E.domain.name>
+
+
+You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8000.
+
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8000/reset/MTk/atn782-1dbd10480eae495b55d4c659c29bf583/
+
+Your username, in case you’ve forgotten: ryad123456
+
+Thanks for using our site!
+
+The 127.0.0.1:8000 team
+
+
+
+-------------------------------------------------------------------------------

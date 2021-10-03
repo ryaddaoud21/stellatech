@@ -1,0 +1,86 @@
+{% extends 'Pharmacy/Main.html' %}
+{% load static %}
+{% block content %}
+
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin - Free Bulma template</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <!-- Bulma Version 0.9.0-->
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/admin.css">
+</head>
+
+<body>
+
+    <!-- START NAV -->
+
+    <!-- END NAV -->
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3 ">
+                <aside class="menu is-hidden-mobile">
+                    <p class="menu-label">
+                        General
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li><a class="is-active">Products</a></li>
+                        <li><a href="{% url 'dashboard_catalog' %}">Catalogues</a></li>
+                        <li><a>Customers</a></li>
+                        <li><a  href="{% url 'dashboard_brands' %}" >Brands</a></li>
+                        <li><a href="{% url 'dashboard_users' %}">Users</a></li>
+                        <li><a>Other</a></li>
+                    </ul>
+
+                </aside>
+            </div>
+            <div class="column is-9">
+                <nav class="breadcrumb" aria-label="breadcrumbs">
+                    <ul>
+                        <li><a href="{% url 'AddProduct' %}" class="btn"> Add product </a></li>
+                        <li><a href="{% url 'archives' %}" class="is-active" >Product archive List </a></li>
+
+                    </ul>
+                </nav>
+                <div class="row">
+{% for product in products %}
+{% if not product.is_archived  %}
+						<div class="col-lg-4">
+							{% if product.image %}
+							<img class="thumbnail" src="{{ product.image.url }}">
+
+							{% else %}
+							<h2> no photo</h2>
+							{% endif %}
+
+							<div class="box-element product">
+								<h6><strong>{{product.name}}</strong></h6>
+								<hr>
+								<a class="btn btn-outline-info" href="{% url 'product_edit' product.id %}">Edit</a>
+								<a class="btn btn-outline-info" href="{% url 'product_archive' product.id %}">Archive</a>
+								<a class="btn btn-outline-danger" href="{% url 'product_delete' product.id %}">Delete</a>
+								<h4 style="display: inline-block; float: right"><strong>{{product.price|floatformat:2}}$</strong></h4>
+
+							</div>
+						</div>
+
+		{% endif %}
+		{% endfor %}
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script async type="text/javascript" src="../js/bulma.js"></script>
+</body>
+
+</html>
+
+{% endblock content %}

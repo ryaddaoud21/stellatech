@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+{% load static %}
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Stella Tech</title>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}" />
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/slick.css'%} " />
+    <link type="text/css" rel="stylesheet" href="{% static 'css/slick-theme.css'%}" />
+
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/nouislider.min.css'%}" />
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/style2.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'css/style3.css'%}">
+    <link rel="stylesheet" href="{% static 'css/aaaa.css'%}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/admin2.css'%}" />
+
+    <link rel="icon" href="img/logo-boutique1.ico" type="image/gif" sizes="16x16">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+
+
+
+
+
+</head>
+
+
+<body>
+
+    <div class="sidebar">
+        <a href="#" class="logo">
+            <img src="{% static 'img/LOGOO.png'%}" alt="" width="190">
+        </a>
+        <br><br><br>
+        <a onclick="switching('Dashboard')"><i class="fa fa-fw fa-tachometer"></i> Dashboard</a>
+        <a onclick="switching('list-produit')"><i class="fa fa-fw  fa-shopping-bag"></i> Products</a>
+        <a onclick="switching('archive')"><i class="fa fa-fw  fa-archive"></i> Archive</a>
+        <a onclick="switching('categorie')"><i class="fa fa-fw fa-book"></i> Catalogues</a>
+        <a onclick="switching('brands')"><i class="fa fa-fw fa-copyright"></i> Brands</a>
+        <a onclick="switching('orders')"><i class="fa fa-fw fa-list-ul"></i> Orders</a>
+        <a onclick="switching('customers')"><i class="fa fa-fw fa-user"></i>Customers</a>
+        <a onclick="switching('list-users')"><i class="fa fa-fw fa-user"></i>Admins</a>
+        <a href="{% url 'homepage'%}"><i class="fa fa-fw fa-user"></i>Back to home</a>
+        <a href="{% url 'logout'%}"><i class="fa fa-fw fa-sign-out"></i> Logout</a>
+
+    </div>
+
+    <main>
+
+        <div class="row">
+
+            <!-- SEARCH BAR -->
+
+<div class="col-md-6" style="margin-left: 21pc;
+    margin-top: 1pc;">
+									<div class="header-search">
+										<form method="GET">
+											{% csrf_token %}
+
+											{% if form.errors %}
+												{% for error in form.errors %}
+														{{ error }}
+												{% endfor %}
+											{% endif %}
+
+											<input class="input" placeholder="Search here" name="name" id="id_name">
+											<button style="height: 40px;
+    width: 100px;
+    background: #248074;
+    color: #FFF;
+    font-weight: 700;
+    border: none;
+}
+
+" type="submit" >Search</button>
+										</form>
+									</div>
+								</div>            <!-- /SEARCH BAR -->
+
+
+            <div class="col-md-15 clearfix">
+                <div class="header-ctn" style="margin-top:20px; margin-right : -50px">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-bell-o" style="color:#162C38"></i>
+                            <span style="color:#162C38">Notification</span>
+                            <!-- <div class="qty">2</div> --><!-- <div class="qty">2</div> -->
+                        </a>
+                        <div class="cart-dropdown">
+                            <div class="cart-list">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-cog" style="color:#162C38"></i>
+                            <span style="color:#162C38">Setting</span>
+                        </a>
+                        <div class="cart-dropdown">
+                            <div class="cart-list">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="list-produit" style="display : none;">
+
+            <div class="section-admin">
+                <!-- SECTION -->
+                <div class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="section-title">
+                                <h3 class="title">List of Products</h3>
+                                <div class="product-btns-admin">
+                                    <button class="btn-ajo" type="button" ><a href="{% url 'Addproduct' %}"> Add Product</a>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
+                            <!-- product -->
+                            {% for product in products %}
+                            {% if not product.is_archived %}
+
+                            <div class="col-md-4 col-xs-6">
+                                <div class="product">
+                                    <div class="product-img">
+                                        <img src="{{product.imageURL}}" alt="" width="200" height="300">
+                                        <div class="product-label">
+                                            <span class="sale">{{product.getremise}}%</span>
+{% if product.is_new %}
+													<span class="new">NEW</span>
+													{% endif %}                                        </div>
+                                    </div>
+                                    <div class="product-body">
+                                        <p class="product-category">{{product.catalog}}</p>
+                                        <h3 class="product-name"><a href="#">{{product.name}}</a></h3>
+                                        <h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.price}}</del>
+                                        </h4>
+                                       <hr>
+                                        <div class="product-btns-admin">
+                                            <a class="btn-mod" href="{% url 'product_edit' product.id%}">Edit</a>
+                                            <a class="btn-mod" href="{% url 'product_archive' product.id%}">Archive</a>
+                                            <a class="btn-mod" href="{% url 'product_delete' product.id%}">Delete</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% endif%}
+                            {% endfor%}
+
+                            <div class="clearfix visible-sm visible-xs"></div>
+
+                        </div>
+                        <!-- /store products -->
+
+                        <!-- store bottom filter -->
+                        <div class="store-filter clearfix">
+                            <ul class="store-pagination">
+                                <li class="active">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /store bottom filter -->
+                    </div>
+                    <!-- /STORE -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /SECTION -->
+        <div id="archive" style="display : none;">
+
+            <div class="section-admin">
+                <!-- SECTION -->
+                <div class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="section-title">
+                                <h3 class="title">List of Archived Products</h3>
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
+                            <!-- product -->
+                            {% for product in products %}
+                            {% if product.is_archived %}
+                            <div class="col-md-4 col-xs-6">
+                                <div class="product">
+                                    <div class="product-img">
+                                        <img src="{{product.imageURL}}" alt="">
+                                        <div class="product-label">
+                                            <span class="sale">{{product.getremise}}%</span>
+{% if product.is_new %}
+													<span class="new">NEW</span>
+													{% endif %}                                        </div>
+                                    </div>
+                                    <div class="product-body">
+                                        <p class="product-category">{{product.catalog}}</p>
+                                        <h3 class="product-name"><a href="#">{{product.name}}</a></h3>
+                                        <h4 class="product-price">${{product.price}} <del class="product-old-price">${{product.price}}</del>
+                                        </h4>
+                                       <hr>
+                                        <div class="product-btns-admin">
+
+                                            <a class="btn-mod" href="{% url 'product_edit' product.id%}">Edit</a>
+                                            <a class="btn-mod" href="{% url 'product_archive' product.id%}">Show</a>
+                                            <a class="btn-mod" href="{% url 'product_delete' product.id%}">Delete</a>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif%}
+                            {% endfor%}
+
+                            <div class="clearfix visible-sm visible-xs"></div>
+
+                        </div>
+                        <!-- /store products -->
+
+                        <!-- store bottom filter -->
+                        <div class="store-filter clearfix">
+                            <ul class="store-pagination">
+                                <li class="active">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /store bottom filter -->
+                    </div>
+                    <!-- /STORE -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+
+        <div id="categorie" style="display : none;">
+
+            <div class="section-admin">
+                <!-- SECTION -->
+                <div class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="section-title">
+                                <h3 class="title">List of Categories</h3>
+                                <div class="product-btns-admin">
+                                    <button class="btn-ajo" type="button"><a href="{% url 'Addcatalog'%}">Add Category</a>  </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
+                            {% for catalog in categories %}
+                            <div class="col-md-4 col-xs-6">
+                                <div class="product">
+                                    <div class="product-body" >
+                                        <div class="product-img">
+                                            <img src="{{catalog.imageURL}}" alt="" width="200" height="200">
+                                        </div>
+                                        <!-- <p class="product-category">Category</p> -->
+                                        <h3 class="catigory-name"><a href="#"> {{catalog.title}}</a></h3>
+                                            <hr>
+                                        <div class="product-btns-admin">
+
+                                           <a class="btn-mod" href="{% url 'catalog_edit' catalog.id%}">Edit</a>
+                                            <a class="btn-mod" href="{% url 'catalog_delete' catalog.id%}">Delete</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /product -->
+                            {% endfor %}
+
+                            <div class="clearfix visible-sm visible-xs"></div>
+
+                        </div>
+                        <!-- /store products -->
+
+                        <!-- store bottom filter -->
+                        <div class="store-filter clearfix">
+                            <ul class="store-pagination">
+                                <li class="active">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /store bottom filter -->
+                    </div>
+                    <!-- /STORE -->
+                </div>
+                <!-- /row -->
+            </div>
+
+        </div>
+
+
+
+
+        <div id="brands" style="display : none;">
+            <div class="section-admin">
+                <!-- SECTION -->
+                <div class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="section-title">
+                                <h3 class="title">List of Brands</h3>
+                                <div class="product-btns-admin">
+                                    <button class="btn-ajo" type="button"> <a href="{% url 'AddBrand'%}">Add Brand</a> </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
+                            {% for brand in brands %}
+                            <div class="col-md-4 col-xs-6">
+                                <div class="product">
+                                    <div class="product-body" >
+                                        <div class="product-img" >
+                                            <img src="{{brand.imageURL}}" alt=""width="200" height="200" >
+                                        </div>
+                                        <!-- <p class="product-category">Category</p> -->
+                                        <h3 class="catigory-name"><a href="#"> {{brand.name}}</a></h3>
+                                    <hr>
+                                        <div class="product-btns-admin">
+                                            <a class="btn-mod" href="{% url 'brand_edit' brand.id%}">Edit</a>
+                                            <a class="btn-mod" href="{% url 'brand_delete' brand.id%}">Delete</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /product -->
+                            {% endfor %}
+
+                            <div class="clearfix visible-sm visible-xs"></div>
+
+                        </div>
+                        <!-- /store products -->
+
+                        <!-- store bottom filter -->
+                        <div class="store-filter clearfix">
+                            <ul class="store-pagination">
+                                <li class="active">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /store bottom filter -->
+                    </div>
+                    <!-- /STORE -->
+                </div>
+                <!-- /row -->
+            </div>
+
+        </div>
+
+         <div id="list-users" style="display : none;">
+
+            <div class="section-admin">
+                <!-- SECTION -->
+                <div class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="section-title">
+                                <h3 class="title">List of Administrators</h3>
+                                {% if request.user.is_superuser  %}
+
+                                <div class="product-btns-admin">
+                                    <button class="btn-ajo" type="button" ><a href="{% url 'AddUser'%}"> Add Admin </a>  </button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
+                            {% if request.user.is_superuser%}
+                            {% for user in users %}
+                            <div class="col-md-4 col-xs-6">
+                                <div class="product">
+                                    <div class="product-body">
+                                        <!-- <p class="product-category">Category</p> -->
+                                        <h3 class="catigory-name"><a href="#"> {{user.name}}</a></h3>
+                                        <h7 class="catigory-name"><a href="#">Added By: {{user.user.username}}</a></h7>
+                                        <br>
+                                        <h5 class="catigory-name"><a href="#"> {{user.Email}}</a></h5>
+                                        <h5 class="catigory-name"><a href="#"> {{user.Phone}}</a></h5>
+                                        <hr>
+                                        <div class="product-btns-admin">
+
+                                           <a class="btn-mod" href="{% url 'user_edit' user.id%}">Edit</a>
+                                            <a class="btn-mod" href="{% url 'user_delete' user.id%}">Delete</a>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /product -->
+                            {% endfor %}
+                            {% else %}
+                            <h5 class="title"> you don't have access to this page .</h5>
+
+                                                        {% endif %}
+
+
+                            <div class="clearfix visible-sm visible-xs"></div>
+
+                        </div>
+                        <!-- /store products -->
+
+                        <!-- store bottom filter -->
+                        <div class="store-filter clearfix">
+                            <ul class="store-pagination">
+                                <li class="active">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /store bottom filter -->
+                    </div>
+                    <!-- /STORE -->
+                </div>
+                <!-- /row -->
+            </div>
+
+        </div>
+
+
+        <div id="customers" style="display : none;">
+
+            <div class="section-admin">
+                <!-- SECTION -->
+                <div class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="section-title">
+                                <h3 class="title">List of Customers</h3>
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
+                            {% for c in customers %}
+                            <div class="col-md-4 col-xs-6">
+                                <div class="product">
+                                    <div class="product-body">
+                                        <!-- <p class="product-category">Category</p> -->
+                                        <h3 class="catigory-name"><a href="#"> {{c.user.username}}</a></h3>
+                                        <h5 class="catigory-name"><a href="#"> {{c.user.email}}</a></h5>
+                                        <br>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /product -->
+                            {% endfor %}
+
+                            <div class="clearfix visible-sm visible-xs"></div>
+
+                        </div>
+                        <!-- /store products -->
+
+                        <!-- store bottom filter -->
+                        <div class="store-filter clearfix">
+                            <ul class="store-pagination">
+                                <li class="active">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /store bottom filter -->
+                    </div>
+                    <!-- /STORE -->
+                </div>
+                <!-- /row -->
+            </div>
+
+        </div>
+
+
+        <!--ajouter categorie -->
+        <div id="ajout-categorie" style="display : none;">
+
+          <div class="container">
+              <div class="grouped">
+                  <div class="row justify-content-center ">
+                      <div class="col-md-4">
+                        <br><br>
+                          <a onclick="switching('categorie')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                          <div class="section-title">
+                              <h3 class="title">Add Category</h3>
+                          </div>
+                          <br>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+        <!--ajouter categorie -->
+
+
+        <!--ajouter brand -->
+        <div id="ajout-brand" style="display : none;">
+
+          <div class="container">
+              <div class="grouped">
+                  <div class="row justify-content-center ">
+                      <div class="col-md-4">
+                        <br><br>
+                          <a onclick="switching('brands')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                          <div class="section-title">
+                              <h3 class="title">Add Brand</h3>
+                          </div>
+                          <br>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+
+        <!--ajouter Sous-Administrateur -->
+        <div id="ajout-Administrateur" style="display : none;">
+
+          <div class="container length">
+              <div class="grouped">
+                  <div class="row justify-content-center ">
+                      <div class="col-md-4">
+                          <a onclick="switching('list-users')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                          <div class="section-title">
+                              <h3 class="title">Add Sous-Administrateur</h3>
+                          </div>
+                          <br>
+                          <div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+        <!--ajouter Sous-Administrateur -->
+
+        <!--modifier categorie -->
+        <div id="modif-categorie" style="display : none;">
+
+          <div class="container">
+              <div class="grouped">
+                  <div class="row justify-content-center ">
+                      <div class="col-md-4">
+                        <br><br>
+                          <a onclick="switching('list-produit')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                          <div class="section-title">
+                              <h3 class="title">Modifer categorie</h3>
+                          </div>
+                          <br>
+                          <div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+        <!--modifier categorie -->
+
+
+
+        <!--modifier produit -->
+        <div id="modif-produit" style="display : none;">
+
+          <div class="container">
+              <div class="grouped">
+                  <div class="row justify-content-center ">
+                      <div class="col-md-4">
+                        <br><br>
+                          <a onclick="switching('list-produit')" class="btn btn-dark my-3 btn-ajo">Go Back</a>
+                          <div class="section-title">
+                              <h3 class="title">Modifer produit</h3>
+                          </div>
+                          <br>
+                          <div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <!--modifier produit -->
+
+        <div id="Dashboard" class="activated" style="display : block;">
+
+            <div class="row" style=" margin-left: 15%;">
+                <div class="column" style="background-color: #162C38">
+                    <h3>Products</h3>
+                    <br>
+                    <h3>{{total_products}}</h3>
+                </div>
+                <div class="column" style="background-color: #248074">
+                    <h3>Categories</h3>
+                    <br>
+                    <h3>{{total_catalogues}}</h3>
+                </div>
+                <div class="column" style="background-color: #fcc446">
+                    <h3>Users</h3>
+                    <br>
+                    <h3>{{total_users}}</h3>
+                </div>
+                <div class="column" style="background-color: #D05543">
+                    <h3>Customers</h3>
+                    <br>
+                    <h3>{{total_customers}}</h3>
+                </div>
+            </div>
+
+
+
+
+            <div class="row" id="tableau">
+                <div class="col-8 col-m-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                Orders
+                            </h3>
+
+                        </div>
+                        <div class="card-content">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                      <th>ID Order</th>
+                                      <th>Product</th>
+                                        <th>Quantity</th>
+                                      <th>Due date</th>
+                                        <th>Accepted</th>
+                                        <th></th>
+
+                                    </tr>
+
+
+
+                                </thead>
+                                <tbody>
+                                 {% for orderitem in orderitems %}
+                                    <tr>
+                                        <td>{{orderitem.id}}</td>
+                                        <td>{{orderitem.product}}</td>
+                                        <td>{{orderitem.quantity}}</td>
+                                        <td>{{orderitem.order.date_ordered}}</td>
+                                        <td>{{orderitem.accepted}}</td>
+                                        <td>   <a class="btn-mod" href=  "{% url 'order_edit' orderitem.id %}">Edit</a></td>
+
+
+                                    </tr>
+                                 {% endfor %}
+
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="container" style="width: 75%;     margin-left: 9pc;
+    margin-top: 4pc;">
+    <canvas id="pie-chart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+
+    var config = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          data: {{ data|safe }},
+          backgroundColor: [
+            '#D05543', '#fcc446', '#248074', '#43aed0', '#162C38'
+          ],
+          label: 'most buy product'
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('pie-chart').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+  </script>
+<br>
+<br>
+<br>
+<br>
+
+        </div>
+
+        <div id="orders" style="display : none;">
+
+
+
+            <div class="row" id="tableau">
+                <div class="col-8 col-m-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                Orders
+                            </h3>
+
+                        </div>
+                        <div class="card-content">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                      <th>ID Order</th>
+                                      <th>Product</th>
+                                        <th>Quantity</th>
+                                      <th>Due date</th>
+                                        <th>accepted</th>
+
+                                    </tr>
+
+
+
+                                </thead>
+                                <tbody>
+                                 {% for orderitem in orderitems %}
+                                 {% if orderitem.accepted   %}
+                                 <tr>
+                                        <td>{{orderitem.id}}</td>
+                                        <td>{{orderitem.product}}</td>
+                                        <td>{{orderitem.quantity}}</td>
+                                        <td>{{orderitem.order.date_ordered}}</td>
+                                        <td>{{orderitem.accepted}}</td>
+
+                                    </tr>
+                                 {% endif %}
+                                 {% endfor %}
+
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+    </main>
+
+    <!-- jQuery Plugins -->
+
+
+    <script type="text/javascript">
+        function switching(id) {
+            const active = document.getElementsByClassName('activated').item(0);
+            active.setAttribute('style', 'display : none;');
+            active.removeAttribute('class');
+            const newActive = document.getElementById(id);
+            newActive.setAttribute('class', 'activated');
+            newActive.removeAttribute('style');
+            newActive.setAttribute('style', 'display : block;');
+        }
+
+
+
+
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                igg.src = URL.createObjectURL(file)
+            }
+        }
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+
+
+
+
+    <script src="{% static 'js/jquery.min.js'%}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'js/slick.min.js'%}"></script>
+    <script src="{% static 'js/nouislider.min.js'%}"></script>
+    <script src="{% static 'js/jquery.zoom.min.js'%}"></script>
+    <script src="{% static 'js/main2.js'%}"></script>
+    <script src="{% static 'js/chart.js'%}" >
+
+
+    </script>
+
+
+</body>
+
+</html>
